@@ -4,7 +4,7 @@ This is the source code for my personal portfolio website, showcasing my project
 
 🚀 Live Demo
 
-https://www.google.com/search?q=https://welcomeluu.github.io/
+https://welcomeluu.github.io/welcome-makhubo/
 
 🛠️ Tech Stack
 
