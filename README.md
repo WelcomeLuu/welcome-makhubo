@@ -47,4 +47,4 @@ Contact section with social links
 
 Email: welcomemakhubo10@gmail.com
 
-LinkedIn: Welcome Makhubo
+LinkedIn: Welcome Makhubo 
