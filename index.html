@@ -1,230 +1,236 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome Makhubo | Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // We force this class in the HTML tag
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#151e2e',
+                            900: '#0f172a',
+                            950: '#020617',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        
-        /* Glassmorphism */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
         }
 
-        /* Scroll Animation Classes */
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0a0f1a; /* Hardcoded Dark Background */
+            color: #f1f5f9; /* Slate-100 */
+        }
+
+        /* Permanently Dark Glass Effect */
+        .glass {
+            background: rgba(30, 41, 59, 0.6); /* Dark Slate with opacity */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.25; /* Dimmed for dark mode */
+            animation: float 20s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        .nav-link {
+            position: relative;
+            color: #94a3b8; /* Slate-400 */
+        }
+
+        .nav-link:hover {
+            color: #60a5fa; /* Blue-400 */
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .animate-marquee {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 40s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
         .reveal {
             opacity: 0;
             transform: translateY(30px);
-            transition: all 1s cubic-bezier(0.5, 0, 0, 1);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .reveal.active {
+
+        .reveal.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* Background Blobs */
-        .blob {
-            position: absolute;
-            filter: blur(50px);
-            z-index: -1;
-            opacity: 0.4;
-            animation: float 10s infinite ease-in-out;
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-        @keyframes float {
-            0% { transform: translate(0px, 0px) scale(1); }
-            33% { transform: translate(30px, -50px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-            100% { transform: translate(0px, 0px) scale(1); }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
         }
-
-        /* Tech Stack Marquee */
-        @keyframes marquee {
-            0% { transform: translateX(0%); }
-            100% { transform: translateX(-50%); }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 10px;
         }
-        .animate-marquee {
-            animation: marquee 25s linear infinite;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 overflow-x-hidden">
+<body class="antialiased overflow-x-hidden">
 
-    <!-- Dynamic Background -->
-    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
-        <div class="blob bg-blue-400 w-96 h-96 rounded-full top-0 left-0 mix-blend-multiply"></div>
-        <div class="blob bg-cyan-300 w-80 h-80 rounded-full top-1/2 right-0 mix-blend-multiply animation-delay-2000"></div>
-        <div class="blob bg-indigo-300 w-96 h-96 rounded-full bottom-0 left-20 mix-blend-multiply animation-delay-4000"></div>
+    <div class="fixed inset-0 pointer-events-none overflow-hidden">
+        <div class="blob bg-blue-900 w-[600px] h-[600px] -top-48 -left-48"></div>
+        <div class="blob bg-cyan-900 w-[500px] h-[500px] top-1/2 -right-24"></div>
+        <div class="blob bg-indigo-900 w-[400px] h-[400px] -bottom-24 left-1/4"></div>
     </div>
 
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 glass-card border-b border-white/50 shadow-sm transition-all duration-300" id="navbar">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#home" class="font-bold text-2xl text-blue-600 tracking-tighter hover:scale-105 transition">WM<span class="text-slate-800">.</span></a>
-            
-            <!-- Desktop Menu -->
-            <div class="space-x-8 hidden md:flex items-center font-medium text-sm">
-                <a href="#home" class="text-slate-600 hover:text-blue-600 transition relative group">
-                    Home
-                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
+    <nav class="fixed top-0 w-full z-[100] transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-6 py-4">
+            <div class="glass rounded-2xl px-6 py-3 flex justify-between items-center shadow-lg bg-[#1e293b]/70">
+                <a href="#" class="text-2xl font-extrabold tracking-tighter text-blue-400">
+                    WM<span class="text-white">.</span>
                 </a>
-                <a href="#about" class="text-slate-600 hover:text-blue-600 transition relative group">
-                    About
-                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
-                </a>
-                <a href="#projects" class="text-slate-600 hover:text-blue-600 transition relative group">
-                    Projects
-                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
-                </a>
-                <a href="#hobbies" class="text-slate-600 hover:text-blue-600 transition relative group">
-                    Hobbies
-                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
-                </a>
-                <a href="#contact" class="px-5 py-2.5 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition shadow-lg shadow-blue-600/30 transform hover:-translate-y-0.5">
-                    Let's Talk
-                </a>
-            </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link text-sm font-semibold tracking-wide transition">Home</a>
+                    <a href="#projects" class="nav-link text-sm font-semibold tracking-wide transition">Projects</a>
+                    <a href="#experience" class="nav-link text-sm font-semibold tracking-wide transition">Journey</a>
+                    <a href="#skills" class="nav-link text-sm font-semibold tracking-wide transition">Skills</a>
+                    
+                    <a href="#contact" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow-lg shadow-blue-500/20 transition-all hover:scale-105 hover:shadow-blue-500/40">
+                        Let's Talk
+                    </a>
+                </div>
 
-            <!-- Mobile Menu Button -->
-            <button class="md:hidden text-slate-800 text-xl" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
-                <i class="fas fa-bars"></i>
-            </button>
+                <div class="flex items-center gap-4 md:hidden">
+                    <button id="mobileMenuBtn" class="text-2xl text-slate-200" aria-label="Open Menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
         </div>
-        <!-- Mobile Dropdown -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100 p-4 shadow-lg">
-            <a href="#home" class="block py-2 text-slate-600">Home</a>
-            <a href="#about" class="block py-2 text-slate-600">About</a>
-            <a href="#projects" class="block py-2 text-slate-600">Projects</a>
-            <a href="#hobbies" class="block py-2 text-slate-600">Hobbies</a>
-            <a href="#contact" class="block py-2 text-blue-600 font-bold">Contact</a>
+        <div id="mobileMenu" class="hidden absolute top-24 left-6 right-6 glass p-6 rounded-3xl shadow-2xl z-[101] border-slate-700">
+            <div class="flex flex-col space-y-4">
+                <a href="#home" class="mobile-nav-link py-2 text-lg font-bold border-b border-slate-700 text-slate-200">Home</a>
+                <a href="#projects" class="mobile-nav-link py-2 text-lg font-bold border-b border-slate-700 text-slate-200">Projects</a>
+                <a href="#experience" class="mobile-nav-link py-2 text-lg font-bold border-b border-slate-700 text-slate-200">Journey</a>
+                <a href="#skills" class="mobile-nav-link py-2 text-lg font-bold border-b border-slate-700 text-slate-200">Skills</a>
+                <a href="#contact" class="py-4 bg-blue-600 text-white rounded-2xl text-center font-bold mt-2">Contact Me</a>
+            </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="min-h-screen flex items-center justify-center pt-20 relative">
-        <div class="container mx-auto px-6 flex flex-col-reverse md:flex-row items-center gap-12">
-            <div class="md:w-1/2 text-center md:text-left space-y-6 reveal active">
-                <div class="inline-flex items-center gap-2 bg-blue-50 border border-blue-100 text-blue-700 px-4 py-1.5 rounded-full text-sm font-semibold">
-                    <span class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
-                    Open to Opportunities
-                </div>
-                <h1 class="text-5xl md:text-7xl font-bold leading-tight text-slate-900">
-                    Bridging Logic <br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">and Creativity.</span>
-                </h1>
-                <p class="text-lg text-slate-600 leading-relaxed max-w-lg mx-auto md:mx-0">
-                    Hi, I'm <strong class="text-slate-900">Welcome Makhubo</strong>. A CS Student, Developer, and Sound Engineer who builds robust software and fixes complex hardware.
-                </p>
-                <div class="flex flex-col sm:flex-row justify-center md:justify-start gap-4 pt-4">
-                    <a href="#projects" class="px-8 py-4 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition shadow-xl hover:shadow-2xl transform hover:-translate-y-1 flex items-center justify-center gap-2">
-                        Explore My Work <i class="fas fa-arrow-right"></i>
-                    </a>
-                    <a href="https://github.com/WelcomeLuu" target="_blank" class="px-8 py-4 bg-white border border-slate-200 text-slate-700 rounded-xl hover:border-blue-300 hover:text-blue-600 transition flex items-center justify-center gap-2">
-                        <i class="fab fa-github text-xl"></i> GitHub
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Hero Image -->
-            <div class="md:w-1/2 flex justify-center reveal delay-200">
-                <div class="relative w-80 h-80 md:w-[500px] md:h-[500px]">
-                    <div class="absolute inset-0 bg-gradient-to-tr from-blue-600 to-cyan-300 rounded-full blur-3xl opacity-20 animate-pulse"></div>
-                    <img src="https://media.licdn.com/dms/image/v2/D4D03AQFXcubn3ORFKQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1731151903044?e=1765411200&v=beta&t=_OqE-BmwZ_2SPGz1Vt8UgBzDj0yayTArCqTPGRdnbdc" alt="Welcome Makhubo" class="relative z-10 rounded-[2rem] shadow-2xl border-8 border-white object-cover w-full h-full rotate-3 hover:rotate-0 transition duration-500">
-                    
-                    <!-- Floating Card 1 -->
-                    <div class="absolute -left-8 top-20 bg-white/90 backdrop-blur p-4 rounded-2xl shadow-lg z-20 flex items-center gap-3 animate-bounce border border-white">
-                        <div class="bg-blue-100 p-2 rounded-lg text-blue-600"><i class="fas fa-code"></i></div>
-                        <div>
-                            <p class="text-xs text-slate-500 font-bold uppercase">Stack</p>
-                            <p class="font-bold text-slate-800">Full Stack Dev</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Floating Card 2 -->
-                    <div class="absolute -right-4 bottom-10 bg-white/90 backdrop-blur p-4 rounded-2xl shadow-lg z-20 flex items-center gap-3 animate-bounce border border-white" style="animation-delay: 1.5s;">
-                        <div class="bg-purple-100 p-2 rounded-lg text-purple-600"><i class="fas fa-wave-square"></i></div>
-                        <div>
-                            <p class="text-xs text-slate-500 font-bold uppercase">Role</p>
-                            <p class="font-bold text-slate-800">Sound Eng.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Tech Stack Marquee -->
-    <div class="bg-slate-900 py-10 overflow-hidden whitespace-nowrap border-y border-slate-800">
-        <div class="inline-block animate-marquee">
-            <span class="mx-12 text-slate-400 font-bold text-2xl flex-inline items-center"><i class="fab fa-python mr-3 text-yellow-400"></i>Python</span>
-            <span class="mx-12 text-slate-400 font-bold text-2xl flex-inline items-center"><i class="fab fa-microsoft mr-3 text-blue-400"></i>ASP.NET</span>
-            <span class="mx-12 text-slate-400 font-bold text-2xl flex-inline items-center"><i class="fab fa-react mr-3 text-cyan-400"></i>React</span>
-            <span class="mx-12 text-slate-400 font-bold text-2xl flex-inline items-center"><i class="fas fa-database mr-3 text-orange-400"></i>SQL</span>
-            <span class="mx-12 text-slate-400 font-bold text-2xl flex-inline items-center"><i class="fab fa-js mr-3 text-yellow-300"></i>JavaScript</span>
-            <span class="mx-12 text-slate-400 font-bold text-2xl flex-inline items-center"><i class="fas fa-network-wired mr-3 text-green-400"></i>Django</span>
-             <!-- Duplicated for loop -->
-            <span class="mx-12 text-slate-400 font-bold text-2xl flex-inline items-center"><i class="fab fa-python mr-3 text-yellow-400"></i>Python</span>
-            <span class="mx-12 text-slate-400 font-bold text-2xl flex-inline items-center"><i class="fab fa-microsoft mr-3 text-blue-400"></i>ASP.NET</span>
-            <span class="mx-12 text-slate-400 font-bold text-2xl flex-inline items-center"><i class="fab fa-react mr-3 text-cyan-400"></i>React</span>
-            <span class="mx-12 text-slate-400 font-bold text-2xl flex-inline items-center"><i class="fas fa-database mr-3 text-orange-400"></i>SQL</span>
-        </div>
-    </div>
-
-    <!-- About Section (Linked to CV) -->
-    <section id="about" class="py-24 relative">
+    <section id="home" class="min-h-screen flex items-center pt-32 pb-20">
         <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row gap-16 items-start">
-                <!-- Left: CV Details -->
-                <div class="md:w-1/2 space-y-8 reveal">
-                    <div>
-                        <h2 class="text-4xl font-bold text-slate-900 mb-4">About Me</h2>
-                        <div class="w-20 h-1.5 bg-blue-600 rounded-full"></div>
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <div class="lg:w-3/5 space-y-8 reveal">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-900/30 text-blue-300 text-xs font-bold uppercase tracking-widest border border-blue-800">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                        </span>
+                        Available for Opportunities
                     </div>
-                    
-                    <p class="text-lg text-slate-600 leading-relaxed">
-                        I am a Final Year <strong>BSc Computer Science and Informatics</strong> student at the University of Johannesburg. I specialize in <strong>Full-Stack Development</strong> and <strong>Business Analysis</strong>, with a knack for leadership and stakeholder management.
+                    <h1 class="text-6xl md:text-8xl font-extrabold tracking-tight leading-[0.9] text-white">
+                        Building <span class="text-blue-500 italic">Digital</span> Solutions with <span class="text-slate-500">Purpose.</span>
+                    </h1>
+                    <p class="text-xl text-slate-400 max-w-2xl leading-relaxed">
+                        I'm <span class="font-bold text-white">Welcome Makhubo</span>, a Computer Science student at UJ specializing in turning complex problems into elegant software and meaningful business insights.
                     </p>
-
-                    <!-- Experience Timeline Mini -->
-                    <div class="space-y-6 pl-4 border-l-2 border-blue-200">
-                        <div class="relative">
-                            <span class="absolute -left-[25px] top-1 w-4 h-4 bg-blue-600 rounded-full border-4 border-white"></span>
-                            <h4 class="font-bold text-slate-900">Student Life Intern (Leadership)</h4>
-                            <p class="text-sm text-slate-500">Richmond Life | Oct 2024 - Present</p>
-                            <p class="text-slate-600 mt-1">Managed stakeholder comms & planned 10+ strategic events.</p>
-                        </div>
-                        <div class="relative">
-                            <span class="absolute -left-[25px] top-1 w-4 h-4 bg-slate-300 rounded-full border-4 border-white"></span>
-                            <h4 class="font-bold text-slate-900">Barman</h4>
-                            <p class="text-sm text-slate-500">Catering Boys | Nov 2022 - Mar 2023</p>
-                            <p class="text-slate-600 mt-1">VIP service delivery under high pressure.</p>
+                    <div class="flex flex-wrap gap-5">
+                        <a href="#projects" class="group px-8 py-4 bg-white text-slate-950 rounded-2xl font-bold transition-all hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:-translate-y-1 flex items-center gap-3">
+                            View Portfolio
+                            <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                        <div class="flex items-center gap-3">
+                            <a href="https://github.com/WelcomeLuu" target="_blank" rel="noopener noreferrer" title="Visit GitHub Profile" class="p-4 glass rounded-2xl hover:text-blue-400 transition shadow-sm border-slate-700 text-slate-300" aria-label="GitHub">
+                                <i class="fab fa-github text-xl"></i>
+                            </a>
+                            <a href="https://linkedin.com/in/welcome-makhubo-894534202" target="_blank" rel="noopener noreferrer" title="Visit LinkedIn Profile" class="p-4 glass rounded-2xl hover:text-blue-400 transition shadow-sm border-slate-700 text-slate-300" aria-label="LinkedIn">
+                                <i class="fab fa-linkedin text-xl"></i>
+                            </a>
                         </div>
                     </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
-                            <h5 class="font-bold text-blue-800 mb-2"><i class="fas fa-graduation-cap mr-2"></i>Education</h5>
-                            <p class="text-sm text-slate-600">BSc Computer Science & Informatics, UJ (Final Year)</p>
+                    <div class="pt-8 grid grid-cols-2 md:grid-cols-3 gap-8 border-t border-slate-800">
+                        <div>
+                            <p class="text-3xl font-bold text-white">BSc</p>
+                            <p class="text-sm text-slate-500 font-medium uppercase tracking-wider">Comp Science</p>
                         </div>
-                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
-                            <h5 class="font-bold text-blue-800 mb-2"><i class="fas fa-certificate mr-2"></i>Latest Cert</h5>
-                            <p class="text-sm text-slate-600">Financial Literacy & Real-World Readiness (Deloitte)</p>
+                        <div>
+                            <p class="text-3xl font-bold text-white">95%</p>
+                            <p class="text-sm text-slate-500 font-medium uppercase tracking-wider">Leadership Rating</p>
+                        </div>
+                        <div class="hidden md:block">
+                            <p class="text-3xl font-bold text-white">inMove</p>
+                            <p class="text-sm text-slate-500 font-medium uppercase tracking-wider">Startup Vision</p>
                         </div>
                     </div>
                 </div>
-
-                <!-- Right: About Image -->
-                <div class="md:w-1/2 reveal delay-200">
-                    <div class="relative group">
-                        <div class="absolute -inset-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-                        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1000&auto=format&fit=crop" alt="Students Collaborating" class="relative rounded-2xl shadow-2xl w-full object-cover h-[500px]">
-                        <div class="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur p-6 rounded-xl shadow-lg">
-                            <p class="font-bold text-slate-800 text-lg">"I don't just write code; I build solutions that people actually use."</p>
+                <div class="lg:w-2/5 relative reveal">
+                    <div class="relative z-10 p-4 glass rounded-[4rem] shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-700 border-2 border-white/10 bg-[#1e293b]/30">
+                        <img src="https://media.licdn.com/dms/image/v2/D4D03AQFXcubn3ORFKQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1731151902978?e=1769040000&v=beta&t=tnmP0jZ-m2LpRZnS3Zbmji1nWLXDWAohhvw4bm_qgBc" 
+                             alt="Welcome Makhubo" 
+                             class="rounded-[3.5rem] w-full aspect-square object-cover grayscale hover:grayscale-0 transition-all duration-500">
+                    </div>
+                    <div class="absolute -right-8 bottom-12 z-20 glass p-6 rounded-3xl shadow-xl flex items-center gap-4 animate-bounce border-slate-700 bg-[#1e293b]/90">
+                        <div class="h-12 w-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg shadow-blue-500/40">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400 font-bold uppercase tracking-tighter">Current Role</p>
+                            <p class="font-bold text-lg leading-tight text-white">Student Life Intern</p>
                         </div>
                     </div>
                 </div>
@@ -232,204 +238,423 @@
         </div>
     </section>
 
-    <!-- Projects Section -->
-    <section id="projects" class="py-24 bg-slate-50 relative">
+    <div class="py-12 bg-slate-950 overflow-hidden relative border-y border-slate-900">
+    <div class="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-slate-950 to-transparent z-10"></div>
+    <div class="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-slate-950 to-transparent z-10"></div>
+    
+    <div class="animate-marquee whitespace-nowrap flex items-center">
+        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+            <i class="fab fa-python text-yellow-500"></i> Python
+        </span>
+        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+            <i class="fab fa-microsoft text-blue-500"></i> ASP.NET
+        </span>
+        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+            <i class="fab fa-react text-cyan-400"></i> React
+        </span>
+        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+            <i class="fas fa-database text-orange-500"></i> SQL Server
+        </span>
+        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+            <i class="fab fa-java text-red-500"></i> Java
+        </span>
+        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+            <i class="fab fa-node-js text-green-500"></i> Node.JS
+        </span>
+        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+            <i class="fas fa-terminal text-blue-400"></i> C# / C++
+        </span>
+        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+            <i class="fab fa-js text-yellow-400"></i> JavaScript
+        </span>
+
+        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+            <i class="fab fa-python text-yellow-500"></i> Python
+        </span>
+        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+            <i class="fab fa-microsoft text-blue-500"></i> ASP.NET
+        </span>
+        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+            <i class="fab fa-react text-cyan-400"></i> React
+        </span>
+        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+            <i class="fas fa-database text-orange-500"></i> SQL Server
+        </span>
+        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+            <i class="fab fa-java text-red-500"></i> Java
+        </span>
+        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+            <i class="fab fa-node-js text-green-500"></i> Node.JS
+        </span>
+        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+            <i class="fas fa-terminal text-blue-400"></i> C# / C++
+        </span>
+        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+            <i class="fab fa-js text-yellow-400"></i> JavaScript
+        </span>
+    </div>
+</div>
+
+    <section id="projects" class="py-32 bg-[#0a0f1a]">
         <div class="container mx-auto px-6">
-            <div class="text-center mb-16 reveal">
-                <span class="text-blue-600 font-bold tracking-wider uppercase text-sm mb-2 block">Innovation & Creativity</span>
-                <h2 class="text-4xl font-bold text-slate-900">Current Projects</h2>
-                <p class="text-slate-600 mt-4 max-w-2xl mx-auto">Always building, always creating. Here is what I am working on right now.</p>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                
-                <!-- Project 1: Marketplace -->
-                <div class="glass-card rounded-3xl p-1 border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 reveal delay-100">
-                    <div class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-[1.4rem] p-8 h-full text-white relative overflow-hidden">
-                        <div class="absolute top-0 right-0 p-3 opacity-10 text-9xl"><i class="fas fa-shopping-cart"></i></div>
-                        
-                        <div class="relative z-10">
-                            <div class="flex justify-between items-start mb-6">
-                                <div class="bg-blue-500/30 backdrop-blur p-3 rounded-xl">
-                                    <i class="fas fa-laptop-code text-2xl"></i>
-                                </div>
-                                <span class="bg-green-400 text-green-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">In Progress</span>
-                            </div>
-                            
-                            <h3 class="text-2xl font-bold mb-2">Student Marketplace Platform</h3>
-                            <p class="text-blue-100 mb-6 leading-relaxed">
-                                A centralized web-based platform enabling students to list, search, and exchange academic resources securely. I'm building the backend architecture to handle reliable transactions and inventory management.
-                            </p>
-                            
-                            <div class="flex flex-wrap gap-2 mt-auto">
-                                <span class="px-3 py-1 bg-white/20 rounded-lg text-sm backdrop-blur">ASP.NET</span>
-                                <span class="px-3 py-1 bg-white/20 rounded-lg text-sm backdrop-blur">C#</span>
-                                <span class="px-3 py-1 bg-white/20 rounded-lg text-sm backdrop-blur">SQL</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 2: Content Creation -->
-                <div class="glass-card rounded-3xl p-1 border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 reveal delay-200">
-                    <div class="bg-white rounded-[1.4rem] p-8 h-full relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 p-3 opacity-5 text-9xl text-purple-500 group-hover:opacity-10 transition-opacity"><i class="fas fa-video"></i></div>
-                        
-                        <div class="relative z-10">
-                            <div class="flex justify-between items-start mb-6">
-                                <div class="bg-purple-100 p-3 rounded-xl text-purple-600">
-                                    <i class="fas fa-camera-retro text-2xl"></i>
-                                </div>
-                                <span class="bg-purple-100 text-purple-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Active</span>
-                            </div>
-                            
-                            <h3 class="text-2xl font-bold text-slate-900 mb-2">Digital Content Creation</h3>
-                            <p class="text-slate-600 mb-6 leading-relaxed">
-                                Documenting my journey as a developer and student leader. I use my storytelling and video editing skills to share insights on tech, student life, and productivity.
-                            </p>
-                            
-                            <div class="flex flex-wrap gap-2 mt-auto">
-                                <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-sm">Video Editing</span>
-                                <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-sm">Storytelling</span>
-                                <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-sm">Social Media</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- My Hobbies Section -->
-    <section id="hobbies" class="py-24 bg-white relative overflow-hidden">
-        <!-- Decoration -->
-        <div class="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-bl-full z-0"></div>
-
-        <div class="container mx-auto px-6 relative z-10">
-            <div class="text-center mb-16 reveal">
-                <h2 class="text-4xl font-bold text-slate-900 mb-4">My Passions & Hobbies</h2>
-                <p class="text-lg text-slate-600 max-w-2xl mx-auto">I believe the best developers are those who are curious about how the world works—whether it's a circuit board or a mixing desk.</p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <!-- Hobby 1: Music -->
-                <div class="glass-card rounded-2xl overflow-hidden group hover:shadow-2xl transition duration-500 reveal delay-100 border-t-4 border-blue-500">
-                    <div class="h-48 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1000&auto=format&fit=crop" alt="DJ Equipment" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
-                    </div>
-                    <div class="p-8">
-                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4 text-blue-600 text-xl">
-                            <i class="fas fa-music"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-3 text-slate-900">The Audio Tech</h3>
-                        <p class="text-slate-600 text-sm leading-relaxed">
-                            Music is precision. I play <strong>piano</strong> at church, <strong>DJ</strong> for events, and work as a <strong>Sound Engineer</strong>. Balancing frequencies live teaches me to handle pressure and real-time feedback.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Hobby 2: Gadgets -->
-                <div class="glass-card rounded-2xl overflow-hidden group hover:shadow-2xl transition duration-500 reveal delay-200 border-t-4 border-green-500">
-                    <div class="h-48 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?q=80&w=1000&auto=format&fit=crop" alt="Electronics Repair" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
-                    </div>
-                    <div class="p-8">
-                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4 text-green-600 text-xl">
-                            <i class="fas fa-screwdriver-wrench"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-3 text-slate-900">The Fixer</h3>
-                        <p class="text-slate-600 text-sm leading-relaxed">
-                            I fix gadgets—phones, home appliances, bicycles. Troubleshooting a broken circuit requires the same logic as debugging code: isolate the variable, test, and resolve.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Hobby 3: Creative -->
-                <div class="glass-card rounded-2xl overflow-hidden group hover:shadow-2xl transition duration-500 reveal delay-300 border-t-4 border-purple-500">
-                    <div class="h-48 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1000&auto=format&fit=crop" alt="Movies and Media" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
-                    </div>
-                    <div class="p-8">
-                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4 text-purple-600 text-xl">
-                            <i class="fas fa-film"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-3 text-slate-900">The Creative</h3>
-                        <p class="text-slate-600 text-sm leading-relaxed">
-                            I enjoy <strong>Marketing</strong> and organization. I'm a movie buff who loves storytelling. Whether it's cleaning my workspace or editing a video, I take pride in presentation.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-24 relative bg-slate-900 text-white">
-        <div class="absolute inset-0 overflow-hidden">
-            <div class="blob bg-blue-600/20 w-[500px] h-[500px] rounded-full top-0 left-1/2 transform -translate-x-1/2 mix-blend-screen"></div>
-        </div>
-        
-        <div class="container mx-auto px-6 relative z-10 text-center">
-            <span class="text-blue-400 font-bold tracking-wider uppercase text-sm mb-4 block">Get In Touch</span>
-            <h2 class="text-4xl md:text-5xl font-bold mb-8">Ready to create something amazing?</h2>
-            <p class="text-slate-400 text-lg mb-12 max-w-xl mx-auto">
-                I am currently open to <strong>Graduate Developer</strong> and <strong>Business Analyst</strong> roles. Let's chat about how I can add value to your team.
-            </p>
-
-            <div class="flex flex-col md:flex-row justify-center gap-6 mb-16">
-                <a href="mailto:welcomemakhubo10@gmail.com" class="group relative px-8 py-4 bg-blue-600 rounded-xl font-bold overflow-hidden transition-all hover:shadow-lg hover:shadow-blue-500/40">
-                    <span class="relative z-10 flex items-center gap-3"><i class="fas fa-envelope"></i> welcomemakhubo10@gmail.com</span>
-                    <div class="absolute inset-0 bg-blue-500 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
-                </a>
-                <a href="https://linkedin.com/in/welcome-makhubo-894534202" target="_blank" class="group relative px-8 py-4 bg-slate-800 border border-slate-700 rounded-xl font-bold overflow-hidden transition-all hover:border-blue-500">
-                    <span class="relative z-10 flex items-center gap-3 text-slate-200 group-hover:text-white"><i class="fab fa-linkedin"></i> LinkedIn Profile</span>
-                </a>
-                <a href="https://www.instagram.com/welcome_makhubo/" target="_blank" class="group relative px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl font-bold overflow-hidden transition-all hover:shadow-lg hover:shadow-pink-500/40 text-white">
-                    <span class="relative z-10 flex items-center gap-3"><i class="fab fa-instagram"></i> Instagram</span>
-                    <div class="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
-                </a>
-            </div>
-
-            <!-- Footer -->
-            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-slate-500 text-sm">
-                <p>&copy; 2025 <span class="text-blue-400">Welcome Makhubo</span>. All rights reserved.</p>
-                <p class="mt-2 md:mt-0 flex items-center gap-2">
-                    <i class="fas fa-robot"></i> Co-created with <span class="text-slate-300">Gemini AI</span>
+            <div class="max-w-3xl mb-20 reveal">
+                <h2 class="text-sm font-bold text-blue-500 uppercase tracking-widest mb-4">Case Studies</h2>
+                <h3 class="text-5xl font-extrabold tracking-tight mb-6 text-white">Innovative Work <span class="text-slate-600">&</span> Ventures.</h3>
+                <p class="text-lg text-slate-400 leading-relaxed">
+                    Solving real-world problems through rigorous system design and user-centric architecture.
                 </p>
             </div>
+
+            <div class="grid lg:grid-cols-2 gap-16 items-center mb-32 reveal">
+                <div class="space-y-8">
+                    <div class="flex items-center gap-4">
+                        <span class="bg-blue-600 text-white px-4 py-1 rounded-full text-xs font-bold uppercase shadow-lg shadow-blue-900/50">MVP Stage</span>
+                        <span class="text-slate-500 text-xs font-bold uppercase tracking-widest">Fintech / E-Commerce</span>
+                    </div>
+                    <h4 class="text-4xl font-bold text-white">inMove Marketplace</h4>
+                    <p class="text-slate-400 leading-relaxed text-lg">
+                        A proprietary student-to-student marketplace ecosystem designed to eliminate fraud through university-specific email verification. Built on Node.JS and SQL, it provides a safe sandbox for peer-to-peer commerce within campus borders.
+                    </p>
+                    <div class="space-y-4 text-slate-300">
+                        <div class="flex items-start gap-4">
+                            <div class="mt-1 h-6 w-6 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400">
+                                <i class="fas fa-check text-xs"></i>
+                            </div>
+                            <p class="text-sm font-medium"><span class="font-bold text-white">Trust Engine:</span> Mandatory .edu authentication protocol.</p>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="mt-1 h-6 w-6 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400">
+                                <i class="fas fa-check text-xs"></i>
+                            </div>
+                            <p class="text-sm font-medium"><span class="font-bold text-white">Architecture:</span> Robust RESTful API with Node.JS and Express.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 pt-4 text-slate-300">
+                        <div class="px-4 py-2 glass rounded-xl text-xs font-bold border-slate-700">Node.JS</div>
+                        <div class="px-4 py-2 glass rounded-xl text-xs font-bold border-slate-700">SQL Server</div>
+                        <div class="px-4 py-2 glass rounded-xl text-xs font-bold border-slate-700">Auth.js</div>
+                    </div>
+                </div>
+                <div class="glass p-10 rounded-[3rem] shadow-2xl relative overflow-hidden bg-[#1e293b]/50 border-slate-700">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 blur-3xl -z-10"></div>
+                    <p class="text-center font-bold text-xs uppercase tracking-widest text-slate-500 mb-8">Trust Factor Comparison</p>
+                    <div class="chart-container">
+                        <canvas id="marketChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass rounded-[3.5rem] p-12 lg:p-20 relative overflow-hidden reveal border-slate-700 bg-[#1e293b]/40">
+                <div class="absolute bottom-0 right-0 opacity-5 pointer-events-none">
+                    <i class="fas fa-video text-[20rem] translate-y-20 translate-x-20 text-white"></i>
+                </div>
+                <div class="max-w-2xl relative z-10">
+                    <span class="text-blue-400 font-bold uppercase tracking-widest text-xs mb-4 block">Future Trajectory</span>
+                    <h4 class="text-4xl font-bold mb-8 text-white">Digital Content & Tech Storytelling</h4>
+                    <p class="text-slate-400 leading-relaxed text-lg mb-8">
+                        Beyond coding, I'm passionate about documenting the developer journey. I'm currently conceptualizing a content platform to bridge the gap between technical complexity and student leadership.
+                    </p>
+                    <div class="grid grid-cols-2 gap-8 mb-10 text-slate-300">
+                        <div class="space-y-2">
+                            <i class="fas fa-film text-blue-400 text-2xl"></i>
+                            <p class="font-bold text-white">Visual Narratives</p>
+                            <p class="text-sm text-slate-500">Simplifying CS concepts through high-fidelity video production.</p>
+                        </div>
+                        <div class="space-y-2">
+                            <i class="fas fa-users text-cyan-400 text-2xl"></i>
+                            <p class="font-bold text-white">Peer Mentorship</p>
+                            <p class="text-sm text-slate-500">Inspiring the next generation of SA tech enthusiasts.</p>
+                        </div>
+                    </div>
+                    <button class="px-8 py-3 border-2 border-white rounded-2xl font-bold text-white hover:bg-white hover:text-slate-950 transition-colors">
+                        Follow the Journey
+                    </button>
+                </div>
+            </div>
         </div>
     </section>
+
+    <section id="experience" class="py-32">
+        <div class="container mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-24">
+                <div class="reveal">
+                    <h3 class="text-4xl font-extrabold mb-16 text-white">Professional <span class="text-blue-500">Journey</span></h3>
+                    
+                    <div class="space-y-12 relative before:absolute before:inset-y-0 before:left-[11px] before:w-[2px] before:bg-slate-800">
+                        <div class="relative pl-12 group">
+                            <div class="absolute left-0 top-0 h-6 w-6 bg-blue-600 rounded-full border-4 border-slate-950 z-10 transition-transform group-hover:scale-125 shadow-[0_0_15px_rgba(37,99,235,0.5)]"></div>
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h4 class="text-xl font-bold text-white">Student Life Intern</h4>
+                                    <p class="text-blue-400 font-semibold">Richmond Life</p>
+                                </div>
+                                <span class="text-xs font-bold px-3 py-1 bg-blue-900/40 text-blue-300 rounded-full border border-blue-800">2024 - Present</span>
+                            </div>
+                            <ul class="text-slate-400 space-y-3 text-sm leading-relaxed mt-4">
+                                <li class="flex gap-2"><span>•</span> <strong>Leadership:</strong> Acted as primary liaison between management and 500+ student residents.</li>
+                                <li class="flex gap-2"><span>•</span> <strong>Operations:</strong> Coordinated 10+ major social and academic integration events.</li>
+                                <li class="flex gap-2"><span>•</span> <strong>Strategy:</strong> Improved resident engagement metrics through data-informed event planning.</li>
+                            </ul>
+                        </div>
+
+                        <div class="relative pl-12 group opacity-60 hover:opacity-100 transition-opacity">
+                            <div class="absolute left-0 top-0 h-6 w-6 bg-slate-700 rounded-full border-4 border-slate-950 z-10"></div>
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h4 class="text-xl font-bold text-slate-300">Hospitality Service Associate</h4>
+                                    <p class="text-slate-500 font-semibold">Catering & Events Co.</p>
+                                </div>
+                                <span class="text-xs font-bold px-3 py-1 bg-slate-800 text-slate-500 rounded-full border border-slate-700">2022 - 2023</span>
+                            </div>
+                            <p class="text-sm text-slate-500 mt-2">Executed high-standard service protocols in high-pressure VIP environments, requiring rapid problem-solving and adaptability.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal">
+                    <h3 class="text-4xl font-extrabold mb-16 text-white">Academics <span class="text-slate-600">&</span> Awards</h3>
+                    <div class="space-y-6">
+                        <div class="glass p-8 rounded-3xl border border-slate-700 group hover:border-blue-500/50 transition-colors bg-[#1e293b]/40">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="h-12 w-12 bg-blue-900/30 text-blue-400 rounded-2xl flex items-center justify-center text-xl border border-blue-800/50">
+                                    <i class="fas fa-university"></i>
+                                </div>
+                                <span class="text-sm font-bold text-slate-500 italic">2023 - 2025</span>
+                            </div>
+                            <h4 class="text-xl font-bold mb-1 text-white">BSc Computer Science & Informatics</h4>
+                            <p class="text-slate-400 font-medium mb-4">University of Johannesburg</p>
+                            <p class="text-sm text-slate-400 leading-relaxed">
+                                Specializing in Informatics and Computer Science with a focus on Enterprise Systems and Algorithm Analysis.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="glass p-6 rounded-3xl border border-slate-700 bg-[#1e293b]/40">
+                                <h5 class="font-bold text-blue-400 text-sm uppercase tracking-widest mb-4">Certifications</h5>
+                                <div class="space-y-4 text-slate-300">
+                                    <div class="flex items-center gap-3">
+                                        <i class="fas fa-certificate text-blue-500"></i>
+                                        <span class="text-xs font-bold">Deloitte WorldClass: Entrep. Skills</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <i class="fas fa-certificate text-blue-500"></i>
+                                        <span class="text-xs font-bold">UJBlockchain: Django/Blockchain</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <i class="fas fa-certificate text-blue-500"></i>
+                                        <span class="text-xs font-bold">JBS: Python Mastery (Distinction)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="glass p-6 rounded-3xl border border-slate-700 bg-[#1e293b]/40">
+                                <h5 class="font-bold text-cyan-500 text-sm uppercase tracking-widest mb-4">Skills Focus</h5>
+                                <div class="flex flex-wrap gap-2 text-white">
+                                    <span class="px-3 py-1 bg-slate-800 rounded-lg text-[10px] font-bold border border-slate-700">Problem Solving</span>
+                                    <span class="px-3 py-1 bg-slate-800 rounded-lg text-[10px] font-bold border border-slate-700">Stakeholder Management</span>
+                                    <span class="px-3 py-1 bg-slate-800 rounded-lg text-[10px] font-bold border border-slate-700">Financial Literacy</span>
+                                    <span class="px-3 py-1 bg-slate-800 rounded-lg text-[10px] font-bold border border-slate-700">System Analysis</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="py-32 relative overflow-hidden bg-slate-950">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),transparent)]"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex flex-col lg:flex-row gap-24 items-center">
+                <div class="glass p-8 rounded-[2rem] shadow-2xl relative overflow-hidden bg-[#1e293b]/80 border-slate-700 lg:w-1/2 reveal">
+    
+                    <div class="flex items-center justify-between mb-4 border-b border-slate-700 pb-4">
+                        <div class="flex gap-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <div class="text-xs font-mono text-slate-400">authMiddleware.js</div>
+                    </div>
+
+                    <div class="font-mono text-xs sm:text-sm leading-relaxed overflow-x-auto">
+                        <div class="text-pink-400">const</div> <span class="text-blue-300">verifyStudent</span> = <span class="text-yellow-300">(email)</span> <span class="text-pink-400">=></span> {<br>
+                        &nbsp;&nbsp;<span class="text-slate-500">// 1. Define trusted domains</span><br>
+                        &nbsp;&nbsp;<span class="text-pink-400">const</span> <span class="text-blue-300">allowedDomains</span> = [<span class="text-green-400">'uj.ac.za'</span>, <span class="text-green-400">'wits.ac.za'</span>];<br><br>
+                        
+                        &nbsp;&nbsp;<span class="text-slate-500">// 2. Extract domain from email</span><br>
+                        &nbsp;&nbsp;<span class="text-pink-400">const</span> <span class="text-blue-300">domain</span> = <span class="text-blue-300">email</span>.<span class="text-yellow-300">split</span>(<span class="text-green-400">'@'</span>)[<span class="text-orange-400">1</span>];<br><br>
+
+                        &nbsp;&nbsp;<span class="text-slate-500">// 3. Validate against database</span><br>
+                        &nbsp;&nbsp;<span class="text-pink-400">if</span> (!<span class="text-blue-300">allowedDomains</span>.<span class="text-yellow-300">includes</span>(<span class="text-blue-300">domain</span>)) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">return</span> { <span class="text-blue-300">valid</span>: <span class="text-orange-400">false</span>, <span class="text-blue-300">error</span>: <span class="text-green-400">'Access Restricted'</span> };<br>
+                        &nbsp;&nbsp;}<br><br>
+                        &nbsp;&nbsp;<span class="text-pink-400">return</span> { <span class="text-blue-300">valid</span>: <span class="text-orange-400">true</span>, <span class="text-blue-300">role</span>: <span class="text-green-400">'STUDENT_VERIFIED'</span> };<br>
+                        }
+                    </div>
+
+                    <div class="absolute bottom-6 right-6">
+                        <div class="flex items-center gap-2 bg-green-500/20 border border-green-500/50 px-3 py-1 rounded-lg">
+                            <i class="fas fa-shield-alt text-green-400 text-xs"></i>
+                            <span class="text-green-400 text-xs font-bold font-mono">Logic Verified</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="contact" class="lg:w-1/2 reveal">
+                    <div class="glass rounded-[3rem] p-12 bg-[#1e293b]/60 border-slate-700 shadow-2xl">
+                        <h3 class="text-3xl font-bold mb-4 text-white">Get in Touch</h3>
+                        <p class="text-slate-400 mb-10">I'm currently looking for internships and entry-level developer roles. Let's create something remarkable.</p>
+                        
+                        <form action="https://formsubmit.co/welcomemakhubo10@gmail.com" method="POST" class="space-y-6">
+                            <input type="text" name="_honey" style="display:none">
+                            <input type="hidden" name="_captcha" value="false">
+                            <input type="hidden" name="_next" value="https://welcomeluu.github.io/portfolio/#contact">
+
+                            <div class="grid grid-cols-2 gap-6">
+                                <div class="space-y-2">
+                                    <label class="text-xs font-bold uppercase tracking-widest text-slate-500">Name</label>
+                                    <input type="text" name="name" placeholder="John Doe" required class="w-full bg-slate-900/50 border border-slate-700 rounded-2xl px-6 py-4 focus:border-blue-500 outline-none transition-colors text-white">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-xs font-bold uppercase tracking-widest text-slate-500">Email</label>
+                                    <input type="email" name="email" placeholder="john@example.com" required class="w-full bg-slate-900/50 border border-slate-700 rounded-2xl px-6 py-4 focus:border-blue-500 outline-none transition-colors text-white">
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold uppercase tracking-widest text-slate-500">Message</label>
+                                <textarea name="message" rows="4" placeholder="How can we collaborate?" required class="w-full bg-slate-900/50 border border-slate-700 rounded-2xl px-6 py-4 focus:border-blue-500 outline-none transition-colors text-white"></textarea>
+                            </div>
+                            <button type="submit" class="w-full py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-[2rem] font-bold shadow-xl shadow-blue-500/20 transition-all hover:-translate-y-1">
+                                Send Message
+                            </button>
+                        </form>
+                        
+                        <div class="mt-12 pt-12 border-t border-slate-700 grid grid-cols-2 gap-6">
+                            <a href="mailto:welcomemakhubo10@gmail.com" class="flex items-center gap-4 group text-slate-300 hover:text-white transition">
+                                <div class="h-10 w-10 bg-slate-800 rounded-xl flex items-center justify-center group-hover:bg-blue-600 transition-colors">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <span class="text-sm font-bold">Email Me</span>
+                            </a>
+                            <a href="tel:+27783650544" class="flex items-center gap-4 group text-slate-300 hover:text-white transition">
+                                <div class="h-10 w-10 bg-slate-800 rounded-xl flex items-center justify-center group-hover:bg-green-600 transition-colors">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <span class="text-sm font-bold">Call Me</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-12 bg-slate-950 border-t border-slate-900">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+            <div>
+                <p class="text-xl font-extrabold tracking-tighter text-white">WM<span class="text-blue-500">.</span></p>
+                <p class="text-sm text-slate-600 mt-1">© 2025 Welcome Makhubo. All rights reserved.</p>
+            </div>
+            <div class="flex gap-8">
+                <a href="#home" class="text-sm font-bold text-slate-500 hover:text-blue-400 transition">Home</a>
+                <a href="#projects" class="text-sm font-bold text-slate-500 hover:text-blue-400 transition">Work</a>
+                <a href="#skills" class="text-sm font-bold text-slate-500 hover:text-blue-400 transition">Contact</a>
+            </div>
+            <div class="text-xs font-bold uppercase tracking-widest text-slate-600">
+                Johannesburg, South Africa
+            </div>
+        </div>
+    </footer>
 
     <script>
-        // Scroll Reveal Animation
-        const revealElements = document.querySelectorAll('.reveal');
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            mobileMenuBtn.querySelector('i').classList.toggle('fa-bars');
+            mobileMenuBtn.querySelector('i').classList.toggle('fa-times');
+        });
 
-        const revealOnScroll = () => {
-            const windowHeight = window.innerHeight;
-            const elementVisible = 100;
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                mobileMenuBtn.querySelector('i').classList.add('fa-bars');
+                mobileMenuBtn.querySelector('i').classList.remove('fa-times');
+            });
+        });
 
-            revealElements.forEach((reveal) => {
-                const elementTop = reveal.getBoundingClientRect().top;
-                if (elementTop < windowHeight - elementVisible) {
-                    reveal.classList.add('active');
+        // Charts
+        let skillsChart; // Removed marketChart variable
+
+        function initCharts() {
+            // Hardcoded Dark Theme Colors
+            const textColor = '#94a3b8'; // slate-400
+            const gridColor = 'rgba(255,255,255,0.05)';
+
+            // --- REMOVED MARKET CHART LOGIC HERE ---
+
+            // Skills Radar Chart
+            // Check if element exists before initializing to prevent errors
+            const skillsCanvas = document.getElementById('skillsChart');
+            
+            if (skillsCanvas) {
+                const ctxSkills = skillsCanvas.getContext('2d');
+                skillsChart = new Chart(ctxSkills, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Full Stack Dev', 'SQL / DB', 'Business Analysis', 'Leadership', 'Sound Eng', 'C# / Python'],
+                        datasets: [{
+                            data: [9, 8.5, 9.5, 10, 8.5, 8.8],
+                            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                            borderColor: '#3b82f6',
+                            borderWidth: 2,
+                            pointBackgroundColor: '#3b82f6',
+                            pointBorderColor: '#0f172a',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: '#3b82f6'
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                angleLines: { color: gridColor },
+                                grid: { color: gridColor },
+                                pointLabels: { color: textColor, font: { size: 11, weight: 'bold' } },
+                                ticks: { display: false, stepSize: 2 },
+                                suggestedMin: 0,
+                                suggestedMax: 10
+                            }
+                        },
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            }
+        }
+
+        // Scroll Reveal
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
                 }
             });
-        };
+        }, observerOptions);
 
-        window.addEventListener('scroll', revealOnScroll);
-        // Trigger once on load
-        revealOnScroll();
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Navbar Glass Effect on Scroll
-        const navbar = document.getElementById('navbar');
+        // Initialize
+        window.onload = initCharts;
+
+        // Sticky Nav Blur
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('shadow-md');
-                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                nav.classList.add('pt-2');
             } else {
-                navbar.classList.remove('shadow-md');
-                navbar.style.background = 'rgba(255, 255, 255, 0.85)';
+                nav.classList.remove('pt-2');
             }
         });
     </script>
