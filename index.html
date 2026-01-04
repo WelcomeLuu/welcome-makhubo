@@ -1,57 +1,46 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome Makhubo | Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            darkMode: 'class', // We force this class in the HTML tag
-            theme: {
-                extend: {
-                    colors: {
-                        slate: {
-                            850: '#151e2e',
-                            900: '#0f172a',
-                            950: '#020617',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
         :root {
             --primary: #3b82f6;
             --primary-dark: #2563eb;
+            --secondary: #06b6d4;
+            --bg-light: #f8fafc;
+            --bg-dark: #0f172a;
         }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #0a0f1a; /* Hardcoded Dark Background */
-            color: #f1f5f9; /* Slate-100 */
+            transition: background-color 0.7s cubic-bezier(0.4, 0, 0.2, 1), color 0.7s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Permanently Dark Glass Effect */
         .glass {
-            background: rgba(30, 41, 59, 0.6); /* Dark Slate with opacity */
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .dark .glass {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .blob {
             position: absolute;
             filter: blur(80px);
             z-index: -1;
-            opacity: 0.25; /* Dimmed for dark mode */
+            opacity: 0.5;
             animation: float 20s infinite ease-in-out;
+            transition: all 0.7s ease;
         }
 
         @keyframes float {
@@ -60,19 +49,8 @@
             66% { transform: translate(-20px, 20px) scale(0.9); }
         }
 
-        .chart-container {
-            position: relative;
-            height: 300px;
-            width: 100%;
-        }
-
         .nav-link {
             position: relative;
-            color: #94a3b8; /* Slate-400 */
-        }
-
-        .nav-link:hover {
-            color: #60a5fa; /* Blue-400 */
         }
 
         .nav-link::after {
@@ -112,62 +90,67 @@
             transform: translateY(0);
         }
 
-        /* Scrollbar Styling */
         ::-webkit-scrollbar {
             width: 8px;
         }
+
         ::-webkit-scrollbar-track {
-            background: #0f172a;
+            background: transparent;
         }
+
         ::-webkit-scrollbar-thumb {
-            background: #334155;
+            background: #cbd5e1;
             border-radius: 10px;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #475569;
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #334155;
         }
     </style>
 </head>
-<body class="antialiased overflow-x-hidden">
+<body class="bg-slate-50 text-slate-900 dark:bg-[#0a0f1a] dark:text-slate-100 antialiased overflow-x-hidden">
 
     <div class="fixed inset-0 pointer-events-none overflow-hidden">
-        <div class="blob bg-blue-900 w-[600px] h-[600px] -top-48 -left-48"></div>
-        <div class="blob bg-cyan-900 w-[500px] h-[500px] top-1/2 -right-24"></div>
-        <div class="blob bg-indigo-900 w-[400px] h-[400px] -bottom-24 left-1/4"></div>
+        <div class="blob bg-blue-400 dark:bg-blue-900 dark:opacity-20 w-[600px] h-[600px] -top-48 -left-48"></div>
+        <div class="blob bg-cyan-400 dark:bg-cyan-900 dark:opacity-20 w-[500px] h-[500px] top-1/2 -right-24"></div>
+        <div class="blob bg-indigo-400 dark:bg-indigo-900 dark:opacity-20 w-[400px] h-[400px] -bottom-24 left-1/4"></div>
     </div>
 
     <nav class="fixed top-0 w-full z-[100] transition-all duration-300" id="navbar">
         <div class="container mx-auto px-6 py-4">
-            <div class="glass rounded-2xl px-6 py-3 flex justify-between items-center shadow-lg bg-[#1e293b]/70">
-                <a href="#" class="text-2xl font-extrabold tracking-tighter text-blue-400">
-                    WM<span class="text-white">.</span>
+            <div class="glass rounded-2xl px-6 py-3 flex justify-between items-center shadow-lg">
+                <a href="#" class="text-2xl font-extrabold tracking-tighter text-blue-600 dark:text-blue-400">
+                    WM<span class="text-slate-900 dark:text-white">.</span>
                 </a>
                 
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#home" class="nav-link text-sm font-semibold tracking-wide transition">Home</a>
-                    <a href="#projects" class="nav-link text-sm font-semibold tracking-wide transition">Projects</a>
-                    <a href="#experience" class="nav-link text-sm font-semibold tracking-wide transition">Journey</a>
-                    <a href="#skills" class="nav-link text-sm font-semibold tracking-wide transition">Skills</a>
-                    
-                    <a href="#contact" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow-lg shadow-blue-500/20 transition-all hover:scale-105 hover:shadow-blue-500/40">
+                    <a href="#home" class="nav-link text-sm font-semibold tracking-wide hover:text-blue-600 dark:hover:text-blue-400 transition">Home</a>
+                    <a href="#projects" class="nav-link text-sm font-semibold tracking-wide hover:text-blue-600 dark:hover:text-blue-400 transition">Projects</a>
+                    <a href="#experience" class="nav-link text-sm font-semibold tracking-wide hover:text-blue-600 dark:hover:text-blue-400 transition">Journey</a>
+                    <a href="#skills" class="nav-link text-sm font-semibold tracking-wide hover:text-blue-600 dark:hover:text-blue-400 transition">Skills</a>
+                    <a href="#contact" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow-lg shadow-blue-500/30 transition-all hover:scale-105">
                         Let's Talk
                     </a>
                 </div>
 
                 <div class="flex items-center gap-4 md:hidden">
-                    <button id="mobileMenuBtn" class="text-2xl text-slate-200" aria-label="Open Menu">
+                    <button id="mobileDarkMode" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 transition-colors">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
+                    <button id="mobileMenuBtn" class="text-2xl" aria-label="Open Menu">
                         <i class="fas fa-bars"></i>
                     </button>
                 </div>
             </div>
         </div>
-        <div id="mobileMenu" class="hidden absolute top-24 left-6 right-6 glass p-6 rounded-3xl shadow-2xl z-[101] border-slate-700">
+        <div id="mobileMenu" class="hidden absolute top-24 left-6 right-6 glass p-6 rounded-3xl shadow-2xl z-[101]">
             <div class="flex flex-col space-y-4">
-                <a href="#home" class="mobile-nav-link py-2 text-lg font-bold border-b border-slate-700 text-slate-200">Home</a>
-                <a href="#projects" class="mobile-nav-link py-2 text-lg font-bold border-b border-slate-700 text-slate-200">Projects</a>
-                <a href="#experience" class="mobile-nav-link py-2 text-lg font-bold border-b border-slate-700 text-slate-200">Journey</a>
-                <a href="#skills" class="mobile-nav-link py-2 text-lg font-bold border-b border-slate-700 text-slate-200">Skills</a>
-                <a href="#contact" class="py-4 bg-blue-600 text-white rounded-2xl text-center font-bold mt-2">Contact Me</a>
+                <a href="#home" class="mobile-nav-link py-2 text-lg font-bold border-b border-slate-200 dark:border-slate-700">Home</a>
+                <a href="#projects" class="mobile-nav-link py-2 text-lg font-bold border-b border-slate-200 dark:border-slate-700">Projects</a>
+                <a href="#experience" class="mobile-nav-link py-2 text-lg font-bold border-b border-slate-200 dark:border-slate-700">Journey</a>
+                <a href="#skills" class="mobile-nav-link py-2 text-lg font-bold border-b border-slate-200 dark:border-slate-700">Skills</a>
+                <a href="#contact" class="py-4 bg-blue-600 text-white rounded-2xl text-center font-bold">Contact Me</a>
             </div>
         </div>
     </nav>
@@ -176,61 +159,61 @@
         <div class="container mx-auto px-6">
             <div class="flex flex-col lg:flex-row items-center gap-16">
                 <div class="lg:w-3/5 space-y-8 reveal">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-900/30 text-blue-300 text-xs font-bold uppercase tracking-widest border border-blue-800">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-bold uppercase tracking-widest border border-blue-200 dark:border-blue-800">
                         <span class="relative flex h-2 w-2">
                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                             <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                         </span>
                         Available for Opportunities
                     </div>
-                    <h1 class="text-6xl md:text-8xl font-extrabold tracking-tight leading-[0.9] text-white">
-                        Building <span class="text-blue-500 italic">Digital</span> Solutions with <span class="text-slate-500">Purpose.</span>
+                    <h1 class="text-6xl md:text-8xl font-extrabold tracking-tight leading-[0.9]">
+                        Building <span class="text-blue-600 italic">Digital</span> Solutions with <span class="text-slate-400">Purpose.</span>
                     </h1>
-                    <p class="text-xl text-slate-400 max-w-2xl leading-relaxed">
-                        I'm <span class="font-bold text-white">Welcome Makhubo</span>, a Computer Science student at UJ specializing in turning complex problems into elegant software and meaningful business insights.
+                    <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed">
+                        I'm <span class="font-bold text-slate-900 dark:text-white">Welcome Makhubo</span>, a Computer Science student at UJ specializing in turning complex problems into elegant software and meaningful business insights.
                     </p>
                     <div class="flex flex-wrap gap-5">
-                        <a href="#projects" class="group px-8 py-4 bg-white text-slate-950 rounded-2xl font-bold transition-all hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:-translate-y-1 flex items-center gap-3">
+                        <a href="#projects" class="group px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-2xl font-bold transition-all hover:shadow-2xl hover:-translate-y-1 flex items-center gap-3">
                             View Portfolio
                             <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
                         </a>
                         <div class="flex items-center gap-3">
-                            <a href="https://github.com/WelcomeLuu" target="_blank" rel="noopener noreferrer" title="Visit GitHub Profile" class="p-4 glass rounded-2xl hover:text-blue-400 transition shadow-sm border-slate-700 text-slate-300" aria-label="GitHub">
+                            <a href="https://github.com/WelcomeLuu" target="_blank" class="p-4 glass rounded-2xl hover:text-blue-600 transition shadow-sm border border-slate-200 dark:border-slate-800">
                                 <i class="fab fa-github text-xl"></i>
                             </a>
-                            <a href="https://linkedin.com/in/welcome-makhubo-894534202" target="_blank" rel="noopener noreferrer" title="Visit LinkedIn Profile" class="p-4 glass rounded-2xl hover:text-blue-400 transition shadow-sm border-slate-700 text-slate-300" aria-label="LinkedIn">
+                            <a href="https://linkedin.com/in/welcome-makhubo-894534202" target="_blank" class="p-4 glass rounded-2xl hover:text-blue-600 transition shadow-sm border border-slate-200 dark:border-slate-800">
                                 <i class="fab fa-linkedin text-xl"></i>
                             </a>
                         </div>
                     </div>
-                    <div class="pt-8 grid grid-cols-2 md:grid-cols-3 gap-8 border-t border-slate-800">
+                    <div class="pt-8 grid grid-cols-2 md:grid-cols-3 gap-8 border-t border-slate-200 dark:border-slate-800">
                         <div>
-                            <p class="text-3xl font-bold text-white">BSc</p>
+                            <p class="text-3xl font-bold">BSc</p>
                             <p class="text-sm text-slate-500 font-medium uppercase tracking-wider">Comp Science</p>
                         </div>
                         <div>
-                            <p class="text-3xl font-bold text-white">95%</p>
+                            <p class="text-3xl font-bold">95%</p>
                             <p class="text-sm text-slate-500 font-medium uppercase tracking-wider">Leadership Rating</p>
                         </div>
                         <div class="hidden md:block">
-                            <p class="text-3xl font-bold text-white">inMove</p>
+                            <p class="text-3xl font-bold">inMove</p>
                             <p class="text-sm text-slate-500 font-medium uppercase tracking-wider">Startup Vision</p>
                         </div>
                     </div>
                 </div>
                 <div class="lg:w-2/5 relative reveal">
-                    <div class="relative z-10 p-4 glass rounded-[4rem] shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-700 border-2 border-white/10 bg-[#1e293b]/30">
+                    <div class="relative z-10 p-4 glass rounded-[4rem] shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-700 border-2 border-white/50">
                         <img src="https://github.com/WelcomeLuu/welcome-makhubo/blob/main/Hero.jpg" 
                              alt="Welcome Makhubo" 
-                             class="rounded-[3.5rem] w-full aspect-square object-cover grayscale hover:grayscale-0 transition-all duration-500">
+                             class="rounded-[3.5rem] w-full aspect-square object-cover">
                     </div>
-                    <div class="absolute -right-8 bottom-12 z-20 glass p-6 rounded-3xl shadow-xl flex items-center gap-4 animate-bounce border-slate-700 bg-[#1e293b]/90">
-                        <div class="h-12 w-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg shadow-blue-500/40">
+                    <div class="absolute -right-8 bottom-12 z-20 glass p-6 rounded-3xl shadow-xl flex items-center gap-4 animate-bounce">
+                        <div class="h-12 w-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white text-2xl">
                             <i class="fas fa-rocket"></i>
                         </div>
                         <div>
                             <p class="text-xs text-slate-400 font-bold uppercase tracking-tighter">Current Role</p>
-                            <p class="font-bold text-lg leading-tight text-white">Student Life Intern</p>
+                            <p class="font-bold text-lg leading-tight">Student Life Intern</p>
                         </div>
                     </div>
                 </div>
@@ -239,68 +222,68 @@
     </section>
 
     <div class="py-12 bg-slate-950 overflow-hidden relative border-y border-slate-900">
-    <div class="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-slate-950 to-transparent z-10"></div>
-    <div class="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-slate-950 to-transparent z-10"></div>
-    
-    <div class="animate-marquee whitespace-nowrap flex items-center">
-        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
-            <i class="fab fa-python text-yellow-500"></i> Python
-        </span>
-        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
-            <i class="fab fa-microsoft text-blue-500"></i> ASP.NET
-        </span>
-        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
-            <i class="fab fa-react text-cyan-400"></i> React
-        </span>
-        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
-            <i class="fas fa-database text-orange-500"></i> SQL Server
-        </span>
-        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
-            <i class="fab fa-java text-red-500"></i> Java
-        </span>
-        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
-            <i class="fab fa-node-js text-green-500"></i> Node.JS
-        </span>
-        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
-            <i class="fas fa-terminal text-blue-400"></i> C# / C++
-        </span>
-        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
-            <i class="fab fa-js text-yellow-400"></i> JavaScript
-        </span>
+        <div class="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-slate-950 to-transparent z-10"></div>
+        <div class="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-slate-950 to-transparent z-10"></div>
+        
+        <div class="animate-marquee whitespace-nowrap flex items-center">
+            <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+                <i class="fab fa-python text-yellow-500"></i> Python
+            </span>
+            <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+                <i class="fab fa-microsoft text-blue-500"></i> ASP.NET
+            </span>
+            <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+                <i class="fab fa-react text-cyan-400"></i> React
+            </span>
+            <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+                <i class="fas fa-database text-orange-500"></i> SQL Server
+            </span>
+            <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+                <i class="fab fa-java text-red-500"></i> Java
+            </span>
+            <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+                <i class="fab fa-node-js text-green-500"></i> Node.JS
+            </span>
+            <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+                <i class="fas fa-terminal text-blue-400"></i> C# / C++
+            </span>
+            <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+                <i class="fab fa-js text-yellow-400"></i> JavaScript
+            </span>
 
-        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
-            <i class="fab fa-python text-yellow-500"></i> Python
-        </span>
-        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
-            <i class="fab fa-microsoft text-blue-500"></i> ASP.NET
-        </span>
-        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
-            <i class="fab fa-react text-cyan-400"></i> React
-        </span>
-        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
-            <i class="fas fa-database text-orange-500"></i> SQL Server
-        </span>
-        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
-            <i class="fab fa-java text-red-500"></i> Java
-        </span>
-        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
-            <i class="fab fa-node-js text-green-500"></i> Node.JS
-        </span>
-        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
-            <i class="fas fa-terminal text-blue-400"></i> C# / C++
-        </span>
-        <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
-            <i class="fab fa-js text-yellow-400"></i> JavaScript
-        </span>
+            <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+                <i class="fab fa-python text-yellow-500"></i> Python
+            </span>
+            <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+                <i class="fab fa-microsoft text-blue-500"></i> ASP.NET
+            </span>
+            <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+                <i class="fab fa-react text-cyan-400"></i> React
+            </span>
+            <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+                <i class="fas fa-database text-orange-500"></i> SQL Server
+            </span>
+            <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+                <i class="fab fa-java text-red-500"></i> Java
+            </span>
+            <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+                <i class="fab fa-node-js text-green-500"></i> Node.JS
+            </span>
+            <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+                <i class="fas fa-terminal text-blue-400"></i> C# / C++
+            </span>
+            <span class="mx-8 text-3xl font-bold text-slate-500 flex items-center gap-3">
+                <i class="fab fa-js text-yellow-400"></i> JavaScript
+            </span>
+        </div>
     </div>
-</div>
 
-    <section id="projects" class="py-32 bg-[#0a0f1a]">
+    <section id="projects" class="py-32 bg-white dark:bg-slate-900/50">
         <div class="container mx-auto px-6">
             <div class="max-w-3xl mb-20 reveal">
-                <h2 class="text-sm font-bold text-blue-500 uppercase tracking-widest mb-4">Case Studies</h2>
-                <h3 class="text-5xl font-extrabold tracking-tight mb-6 text-white">Innovative Work <span class="text-slate-600">&</span> Ventures.</h3>
-                <p class="text-lg text-slate-400 leading-relaxed">
+                <h2 class="text-sm font-bold text-blue-600 uppercase tracking-widest mb-4">Case Studies</h2>
+                <h3 class="text-5xl font-extrabold tracking-tight mb-6">Innovative Work <span class="text-slate-400">&</span> Ventures.</h3>
+                <p class="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
                     Solving real-world problems through rigorous system design and user-centric architecture.
                 </p>
             </div>
@@ -308,166 +291,34 @@
             <div class="grid lg:grid-cols-2 gap-16 items-center mb-32 reveal">
                 <div class="space-y-8">
                     <div class="flex items-center gap-4">
-                        <span class="bg-blue-600 text-white px-4 py-1 rounded-full text-xs font-bold uppercase shadow-lg shadow-blue-900/50">MVP Stage</span>
-                        <span class="text-slate-500 text-xs font-bold uppercase tracking-widest">Fintech / E-Commerce</span>
+                        <span class="bg-blue-600 text-white px-4 py-1 rounded-full text-xs font-bold uppercase">MVP Stage</span>
+                        <span class="text-slate-400 text-xs font-bold uppercase tracking-widest">Fintech / E-Commerce</span>
                     </div>
-                    <h4 class="text-4xl font-bold text-white">inMove Marketplace</h4>
-                    <p class="text-slate-400 leading-relaxed text-lg">
+                    <h4 class="text-4xl font-bold">inMove Marketplace</h4>
+                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed text-lg">
                         A proprietary student-to-student marketplace ecosystem designed to eliminate fraud through university-specific email verification. Built on Node.JS and SQL, it provides a safe sandbox for peer-to-peer commerce within campus borders.
                     </p>
-                    <div class="space-y-4 text-slate-300">
+                    <div class="space-y-4">
                         <div class="flex items-start gap-4">
-                            <div class="mt-1 h-6 w-6 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400">
+                            <div class="mt-1 h-6 w-6 rounded-lg bg-green-500/10 flex items-center justify-center text-green-500">
                                 <i class="fas fa-check text-xs"></i>
                             </div>
-                            <p class="text-sm font-medium"><span class="font-bold text-white">Trust Engine:</span> Mandatory .edu authentication protocol.</p>
+                            <p class="text-sm font-medium"><span class="font-bold">Trust Engine:</span> Mandatory .edu authentication protocol.</p>
                         </div>
                         <div class="flex items-start gap-4">
-                            <div class="mt-1 h-6 w-6 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400">
+                            <div class="mt-1 h-6 w-6 rounded-lg bg-green-500/10 flex items-center justify-center text-green-500">
                                 <i class="fas fa-check text-xs"></i>
                             </div>
-                            <p class="text-sm font-medium"><span class="font-bold text-white">Architecture:</span> Robust RESTful API with Node.JS and Express.</p>
+                            <p class="text-sm font-medium"><span class="font-bold">Architecture:</span> Robust RESTful API with Node.JS and Express.</p>
                         </div>
                     </div>
-                    <div class="flex gap-4 pt-4 text-slate-300">
-                        <div class="px-4 py-2 glass rounded-xl text-xs font-bold border-slate-700">Node.JS</div>
-                        <div class="px-4 py-2 glass rounded-xl text-xs font-bold border-slate-700">SQL Server</div>
-                        <div class="px-4 py-2 glass rounded-xl text-xs font-bold border-slate-700">Auth.js</div>
+                    <div class="flex gap-4 pt-4">
+                        <div class="px-4 py-2 glass rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-800">Node.JS</div>
+                        <div class="px-4 py-2 glass rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-800">SQL Server</div>
+                        <div class="px-4 py-2 glass rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-800">Auth.js</div>
                     </div>
                 </div>
-                <div class="glass p-10 rounded-[3rem] shadow-2xl relative overflow-hidden bg-[#1e293b]/50 border-slate-700">
-                    <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 blur-3xl -z-10"></div>
-                    <p class="text-center font-bold text-xs uppercase tracking-widest text-slate-500 mb-8">Trust Factor Comparison</p>
-                    <div class="chart-container">
-                        <canvas id="marketChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="glass rounded-[3.5rem] p-12 lg:p-20 relative overflow-hidden reveal border-slate-700 bg-[#1e293b]/40">
-                <div class="absolute bottom-0 right-0 opacity-5 pointer-events-none">
-                    <i class="fas fa-video text-[20rem] translate-y-20 translate-x-20 text-white"></i>
-                </div>
-                <div class="max-w-2xl relative z-10">
-                    <span class="text-blue-400 font-bold uppercase tracking-widest text-xs mb-4 block">Future Trajectory</span>
-                    <h4 class="text-4xl font-bold mb-8 text-white">Digital Content & Tech Storytelling</h4>
-                    <p class="text-slate-400 leading-relaxed text-lg mb-8">
-                        Beyond coding, I'm passionate about documenting the developer journey. I'm currently conceptualizing a content platform to bridge the gap between technical complexity and student leadership.
-                    </p>
-                    <div class="grid grid-cols-2 gap-8 mb-10 text-slate-300">
-                        <div class="space-y-2">
-                            <i class="fas fa-film text-blue-400 text-2xl"></i>
-                            <p class="font-bold text-white">Visual Narratives</p>
-                            <p class="text-sm text-slate-500">Simplifying CS concepts through high-fidelity video production.</p>
-                        </div>
-                        <div class="space-y-2">
-                            <i class="fas fa-users text-cyan-400 text-2xl"></i>
-                            <p class="font-bold text-white">Peer Mentorship</p>
-                            <p class="text-sm text-slate-500">Inspiring the next generation of SA tech enthusiasts.</p>
-                        </div>
-                    </div>
-                    <button class="px-8 py-3 border-2 border-white rounded-2xl font-bold text-white hover:bg-white hover:text-slate-950 transition-colors">
-                        Follow the Journey
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="experience" class="py-32">
-        <div class="container mx-auto px-6">
-            <div class="grid lg:grid-cols-2 gap-24">
-                <div class="reveal">
-                    <h3 class="text-4xl font-extrabold mb-16 text-white">Professional <span class="text-blue-500">Journey</span></h3>
-                    
-                    <div class="space-y-12 relative before:absolute before:inset-y-0 before:left-[11px] before:w-[2px] before:bg-slate-800">
-                        <div class="relative pl-12 group">
-                            <div class="absolute left-0 top-0 h-6 w-6 bg-blue-600 rounded-full border-4 border-slate-950 z-10 transition-transform group-hover:scale-125 shadow-[0_0_15px_rgba(37,99,235,0.5)]"></div>
-                            <div class="flex justify-between items-start mb-2">
-                                <div>
-                                    <h4 class="text-xl font-bold text-white">Student Life Intern</h4>
-                                    <p class="text-blue-400 font-semibold">Richmond Life</p>
-                                </div>
-                                <span class="text-xs font-bold px-3 py-1 bg-blue-900/40 text-blue-300 rounded-full border border-blue-800">2024 - Present</span>
-                            </div>
-                            <ul class="text-slate-400 space-y-3 text-sm leading-relaxed mt-4">
-                                <li class="flex gap-2"><span>•</span> <strong>Leadership:</strong> Acted as primary liaison between management and 500+ student residents.</li>
-                                <li class="flex gap-2"><span>•</span> <strong>Operations:</strong> Coordinated 10+ major social and academic integration events.</li>
-                                <li class="flex gap-2"><span>•</span> <strong>Strategy:</strong> Improved resident engagement metrics through data-informed event planning.</li>
-                            </ul>
-                        </div>
-
-                        <div class="relative pl-12 group opacity-60 hover:opacity-100 transition-opacity">
-                            <div class="absolute left-0 top-0 h-6 w-6 bg-slate-700 rounded-full border-4 border-slate-950 z-10"></div>
-                            <div class="flex justify-between items-start mb-2">
-                                <div>
-                                    <h4 class="text-xl font-bold text-slate-300">Hospitality Service Associate</h4>
-                                    <p class="text-slate-500 font-semibold">Catering & Events Co.</p>
-                                </div>
-                                <span class="text-xs font-bold px-3 py-1 bg-slate-800 text-slate-500 rounded-full border border-slate-700">2022 - 2023</span>
-                            </div>
-                            <p class="text-sm text-slate-500 mt-2">Executed high-standard service protocols in high-pressure VIP environments, requiring rapid problem-solving and adaptability.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="reveal">
-                    <h3 class="text-4xl font-extrabold mb-16 text-white">Academics <span class="text-slate-600">&</span> Awards</h3>
-                    <div class="space-y-6">
-                        <div class="glass p-8 rounded-3xl border border-slate-700 group hover:border-blue-500/50 transition-colors bg-[#1e293b]/40">
-                            <div class="flex justify-between items-start mb-4">
-                                <div class="h-12 w-12 bg-blue-900/30 text-blue-400 rounded-2xl flex items-center justify-center text-xl border border-blue-800/50">
-                                    <i class="fas fa-university"></i>
-                                </div>
-                                <span class="text-sm font-bold text-slate-500 italic">2023 - 2025</span>
-                            </div>
-                            <h4 class="text-xl font-bold mb-1 text-white">BSc Computer Science & Informatics</h4>
-                            <p class="text-slate-400 font-medium mb-4">University of Johannesburg</p>
-                            <p class="text-sm text-slate-400 leading-relaxed">
-                                Specializing in Informatics and Computer Science with a focus on Enterprise Systems and Algorithm Analysis.
-                            </p>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="glass p-6 rounded-3xl border border-slate-700 bg-[#1e293b]/40">
-                                <h5 class="font-bold text-blue-400 text-sm uppercase tracking-widest mb-4">Certifications</h5>
-                                <div class="space-y-4 text-slate-300">
-                                    <div class="flex items-center gap-3">
-                                        <i class="fas fa-certificate text-blue-500"></i>
-                                        <span class="text-xs font-bold">Deloitte WorldClass: Entrep. Skills</span>
-                                    </div>
-                                    <div class="flex items-center gap-3">
-                                        <i class="fas fa-certificate text-blue-500"></i>
-                                        <span class="text-xs font-bold">UJBlockchain: Django/Blockchain</span>
-                                    </div>
-                                    <div class="flex items-center gap-3">
-                                        <i class="fas fa-certificate text-blue-500"></i>
-                                        <span class="text-xs font-bold">JBS: Python Mastery (Distinction)</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="glass p-6 rounded-3xl border border-slate-700 bg-[#1e293b]/40">
-                                <h5 class="font-bold text-cyan-500 text-sm uppercase tracking-widest mb-4">Skills Focus</h5>
-                                <div class="flex flex-wrap gap-2 text-white">
-                                    <span class="px-3 py-1 bg-slate-800 rounded-lg text-[10px] font-bold border border-slate-700">Problem Solving</span>
-                                    <span class="px-3 py-1 bg-slate-800 rounded-lg text-[10px] font-bold border border-slate-700">Stakeholder Management</span>
-                                    <span class="px-3 py-1 bg-slate-800 rounded-lg text-[10px] font-bold border border-slate-700">Financial Literacy</span>
-                                    <span class="px-3 py-1 bg-slate-800 rounded-lg text-[10px] font-bold border border-slate-700">System Analysis</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="skills" class="py-32 relative overflow-hidden bg-slate-950">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),transparent)]"></div>
-        <div class="container mx-auto px-6 relative z-10">
-            <div class="flex flex-col lg:flex-row gap-24 items-center">
-                <div class="glass p-8 rounded-[2rem] shadow-2xl relative overflow-hidden bg-[#1e293b]/80 border-slate-700 lg:w-1/2 reveal">
-    
+                <div class="glass p-8 rounded-[2rem] shadow-2xl relative overflow-hidden bg-[#1e293b]/80 border-slate-700">    
                     <div class="flex items-center justify-between mb-4 border-b border-slate-700 pb-4">
                         <div class="flex gap-2">
                             <div class="w-3 h-3 rounded-full bg-red-500"></div>
@@ -500,8 +351,189 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="glass rounded-[3.5rem] p-12 lg:p-20 relative overflow-hidden reveal">
+                <div class="absolute bottom-0 right-0 opacity-10 pointer-events-none">
+                    <i class="fas fa-video text-[20rem] translate-y-20 translate-x-20"></i>
+                </div>
+                <div class="max-w-2xl relative z-10">
+                    <span class="text-blue-600 font-bold uppercase tracking-widest text-xs mb-4 block">Future Trajectory</span>
+                    <h4 class="text-4xl font-bold mb-8">Digital Content & Tech Storytelling</h4>
+                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed text-lg mb-8">
+                        Beyond coding, I'm passionate about documenting the developer journey. I'm currently conceptualizing a content platform to bridge the gap between technical complexity and student leadership.
+                    </p>
+                    <div class="grid grid-cols-2 gap-8 mb-10">
+                        <div class="space-y-2">
+                            <i class="fas fa-film text-blue-500 text-2xl"></i>
+                            <p class="font-bold">Visual Narratives</p>
+                            <p class="text-sm text-slate-500">Simplifying CS concepts through high-fidelity video production.</p>
+                        </div>
+                        <div class="space-y-2">
+                            <i class="fas fa-users text-cyan-500 text-2xl"></i>
+                            <p class="font-bold">Peer Mentorship</p>
+                            <p class="text-sm text-slate-500">Inspiring the next generation of SA tech enthusiasts.</p>
+                        </div>
+                    </div>
+                    <button class="px-8 py-3 border-2 border-slate-900 dark:border-white rounded-2xl font-bold hover:bg-slate-900 hover:text-white dark:hover:bg-white dark:hover:text-slate-900 transition-colors">
+                        Follow the Journey
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="py-32">
+        <div class="container mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-24">
+                <div class="reveal">
+                    <h3 class="text-4xl font-extrabold mb-16">Professional <span class="text-blue-600">Journey</span></h3>
+                    
+                    <div class="space-y-12 relative before:absolute before:inset-y-0 before:left-[11px] before:w-[2px] before:bg-slate-200 dark:before:bg-slate-800">
+                        <div class="relative pl-12 group">
+                            <div class="absolute left-0 top-0 h-6 w-6 bg-blue-600 rounded-full border-4 border-slate-50 dark:border-slate-950 z-10 transition-transform group-hover:scale-125"></div>
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h4 class="text-xl font-bold">Student Life Intern</h4>
+                                    <p class="text-blue-600 font-semibold">Richmond Life</p>
+                                </div>
+                                <span class="text-xs font-bold px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded-full">2024 - Present</span>
+                            </div>
+                            <ul class="text-slate-600 dark:text-slate-400 space-y-3 text-sm leading-relaxed mt-4">
+                                <li class="flex gap-2"><span>•</span> <strong>Leadership:</strong> Acted as primary liaison between management and 500+ student residents.</li>
+                                <li class="flex gap-2"><span>•</span> <strong>Operations:</strong> Coordinated 10+ major social and academic integration events.</li>
+                                <li class="flex gap-2"><span>•</span> <strong>Strategy:</strong> Improved resident engagement metrics through data-informed event planning.</li>
+                            </ul>
+                        </div>
+
+                        <div class="relative pl-12 group opacity-75 hover:opacity-100 transition-opacity">
+                            <div class="absolute left-0 top-0 h-6 w-6 bg-slate-300 dark:bg-slate-700 rounded-full border-4 border-slate-50 dark:border-slate-950 z-10"></div>
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h4 class="text-xl font-bold">VIP Service Associate</h4>
+                                    <p class="text-slate-500 font-semibold">Catering Boys</p>
+                                </div>
+                                <span class="text-xs font-bold px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-full">2022 - 2023</span>
+                            </div>
+                            <p class="text-sm text-slate-500 mt-2">Delivered precision service in high-stakes VIP environments, honing interpersonal intelligence and crisis management skills.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal">
+                    <h3 class="text-4xl font-extrabold mb-16">Academics <span class="text-slate-400">&</span> Awards</h3>
+                    <div class="space-y-6">
+                        <div class="glass p-8 rounded-3xl border border-slate-200 dark:border-slate-800 group hover:border-blue-500/50 transition-colors">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="h-12 w-12 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded-2xl flex items-center justify-center text-xl">
+                                    <i class="fas fa-university"></i>
+                                </div>
+                                <span class="text-sm font-bold text-slate-400 italic">2023 - 2025</span>
+                            </div>
+                            <h4 class="text-xl font-bold mb-1">BSc Computer Science & Informatics</h4>
+                            <p class="text-slate-500 font-medium mb-4">University of Johannesburg</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                                Specializing in Informatics and Computer Science with a focus on Enterprise Systems and Algorithm Analysis.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="glass p-6 rounded-3xl border border-slate-200 dark:border-slate-800">
+                                <h5 class="font-bold text-blue-600 text-sm uppercase tracking-widest mb-4">Certifications</h5>
+                                <div class="space-y-4">
+                                    <div class="flex items-center gap-3">
+                                        <i class="fas fa-certificate text-blue-500"></i>
+                                        <span class="text-xs font-bold">Deloitte WorldClass: Entrep. Skills</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <i class="fas fa-certificate text-blue-500"></i>
+                                        <span class="text-xs font-bold">UJBlockchain: Django/Blockchain</span>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <i class="fas fa-certificate text-blue-500"></i>
+                                        <span class="text-xs font-bold">JBS: Python Mastery (Distinction)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="glass p-6 rounded-3xl border border-slate-200 dark:border-slate-800">
+                                <h5 class="font-bold text-cyan-600 text-sm uppercase tracking-widest mb-4">Skills Focus</h5>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg text-[10px] font-bold">Problem Solving</span>
+                                    <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg text-[10px] font-bold">Stakeholder Management</span>
+                                    <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg text-[10px] font-bold">Financial Literacy</span>
+                                    <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg text-[10px] font-bold">System Analysis</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="py-32 relative overflow-hidden bg-slate-950">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),transparent)]"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            
+            <div class="mb-16 reveal">
+                <h2 class="text-5xl font-extrabold tracking-tight mb-6 text-white">Technical <span class="text-blue-500">Arsenal.</span></h2>
+                <p class="text-slate-400 text-lg max-w-2xl">
+                    A robust stack of technologies I use to build scalable, enterprise-grade applications.
+                </p>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-16">
+                <div class="lg:w-1/2 grid gap-6 reveal">
+                    
+                    <div class="glass p-8 rounded-3xl border-slate-700 bg-[#1e293b]/40">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="p-3 bg-blue-500/10 rounded-xl text-blue-400">
+                                <i class="fas fa-server text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">Backend Engineering</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-300 font-mono">C# / .NET Core</span>
+                            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-300 font-mono">Node.js</span>
+                            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-300 font-mono">Express</span>
+                            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-300 font-mono">REST APIs</span>
+                        </div>
+                    </div>
+
+                    <div class="glass p-8 rounded-3xl border-slate-700 bg-[#1e293b]/40">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="p-3 bg-green-500/10 rounded-xl text-green-400">
+                                <i class="fas fa-database text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">Data & Architecture</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-300 font-mono">MS SQL Server</span>
+                            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-300 font-mono">PostgreSQL</span>
+                            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-300 font-mono">Entity Framework</span>
+                            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-300 font-mono">System Design</span>
+                        </div>
+                    </div>
+
+                    <div class="glass p-8 rounded-3xl border-slate-700 bg-[#1e293b]/40">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="p-3 bg-purple-500/10 rounded-xl text-purple-400">
+                                <i class="fas fa-code text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">Frontend & UI</h3>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-300 font-mono">React.js</span>
+                            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-300 font-mono">Tailwind CSS</span>
+                            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-300 font-mono">HTML5 / CSS3</span>
+                            <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-300 font-mono">JavaScript (ES6+)</span>
+                        </div>
+                    </div>
+
+                </div>
+
                 <div id="contact" class="lg:w-1/2 reveal">
-                    <div class="glass rounded-[3rem] p-12 bg-[#1e293b]/60 border-slate-700 shadow-2xl">
+                    <div class="glass rounded-[3rem] p-12 bg-[#1e293b]/60 border-slate-700 shadow-2xl h-full">
                         <h3 class="text-3xl font-bold mb-4 text-white">Get in Touch</h3>
                         <p class="text-slate-400 mb-10">I'm currently looking for internships and entry-level developer roles. Let's create something remarkable.</p>
                         
@@ -549,24 +581,39 @@
         </div>
     </section>
 
-    <footer class="py-12 bg-slate-950 border-t border-slate-900">
+    <footer class="py-12 bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800">
         <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
             <div>
-                <p class="text-xl font-extrabold tracking-tighter text-white">WM<span class="text-blue-500">.</span></p>
-                <p class="text-sm text-slate-600 mt-1">© 2025 Welcome Makhubo. All rights reserved.</p>
+                <p class="text-xl font-extrabold tracking-tighter">WM<span class="text-blue-600">.</span></p>
+                <p class="text-sm text-slate-500 mt-1">© 2025 Welcome Makhubo. All rights reserved.</p>
             </div>
             <div class="flex gap-8">
-                <a href="#home" class="text-sm font-bold text-slate-500 hover:text-blue-400 transition">Home</a>
-                <a href="#projects" class="text-sm font-bold text-slate-500 hover:text-blue-400 transition">Work</a>
-                <a href="#skills" class="text-sm font-bold text-slate-500 hover:text-blue-400 transition">Contact</a>
+                <a href="#home" class="text-sm font-bold text-slate-400 hover:text-blue-600 transition">Home</a>
+                <a href="#projects" class="text-sm font-bold text-slate-400 hover:text-blue-600 transition">Work</a>
+                <a href="#skills" class="text-sm font-bold text-slate-400 hover:text-blue-600 transition">Contact</a>
             </div>
-            <div class="text-xs font-bold uppercase tracking-widest text-slate-600">
+            <div class="text-xs font-bold uppercase tracking-widest text-slate-400">
                 Johannesburg, South Africa
             </div>
         </div>
     </footer>
 
     <script>
+        // Dark Mode Logic
+        const mobileDarkMode = document.getElementById('mobileDarkMode');
+        const html = document.documentElement;
+
+        function toggleDarkMode() {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        }
+
+        mobileDarkMode.addEventListener('click', toggleDarkMode);
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        }
+
         // Mobile Menu
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
@@ -584,55 +631,6 @@
             });
         });
 
-        // Charts
-        let skillsChart; // Removed marketChart variable
-
-        function initCharts() {
-            // Hardcoded Dark Theme Colors
-            const textColor = '#94a3b8'; // slate-400
-            const gridColor = 'rgba(255,255,255,0.05)';
-
-            // --- REMOVED MARKET CHART LOGIC HERE ---
-
-            // Skills Radar Chart
-            // Check if element exists before initializing to prevent errors
-            const skillsCanvas = document.getElementById('skillsChart');
-            
-            if (skillsCanvas) {
-                const ctxSkills = skillsCanvas.getContext('2d');
-                skillsChart = new Chart(ctxSkills, {
-                    type: 'radar',
-                    data: {
-                        labels: ['Full Stack Dev', 'SQL / DB', 'Business Analysis', 'Leadership', 'Sound Eng', 'C# / Python'],
-                        datasets: [{
-                            data: [9, 8.5, 9.5, 10, 8.5, 8.8],
-                            backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                            borderColor: '#3b82f6',
-                            borderWidth: 2,
-                            pointBackgroundColor: '#3b82f6',
-                            pointBorderColor: '#0f172a',
-                            pointHoverBackgroundColor: '#fff',
-                            pointHoverBorderColor: '#3b82f6'
-                        }]
-                    },
-                    options: {
-                        maintainAspectRatio: false,
-                        scales: {
-                            r: {
-                                angleLines: { color: gridColor },
-                                grid: { color: gridColor },
-                                pointLabels: { color: textColor, font: { size: 11, weight: 'bold' } },
-                                ticks: { display: false, stepSize: 2 },
-                                suggestedMin: 0,
-                                suggestedMax: 10
-                            }
-                        },
-                        plugins: { legend: { display: false } }
-                    }
-                });
-            }
-        }
-
         // Scroll Reveal
         const observerOptions = { threshold: 0.1 };
         const observer = new IntersectionObserver((entries) => {
@@ -644,9 +642,6 @@
         }, observerOptions);
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-        // Initialize
-        window.onload = initCharts;
 
         // Sticky Nav Blur
         window.addEventListener('scroll', () => {
@@ -660,5 +655,3 @@
     </script>
 </body>
 </html>
-
-
